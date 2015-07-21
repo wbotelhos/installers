@@ -52,12 +52,12 @@ begin() {
 }
 
 clean() {
-  sudo rm -rf ${TOMCAT_PATH}/LICENSE
-  sudo rm -rf ${TOMCAT_PATH}/NOTICE
-  sudo rm -rf ${TOMCAT_PATH}/RELEASE-NOTES
-  sudo rm -rf ${TOMCAT_PATH}/RUNNING.txt
-  sudo rm -rf ${TOMCAT_PATH}/webapps/docs
-  sudo rm -rf ${TOMCAT_PATH}/webapps/examples
+  rm -rf ${TOMCAT_PATH}/LICENSE
+  rm -rf ${TOMCAT_PATH}/NOTICE
+  rm -rf ${TOMCAT_PATH}/RELEASE-NOTES
+  rm -rf ${TOMCAT_PATH}/RUNNING.txt
+  rm -rf ${TOMCAT_PATH}/webapps/docs
+  rm -rf ${TOMCAT_PATH}/webapps/examples
 }
 
 download() {
@@ -83,18 +83,19 @@ end() {
 move() {
   rm -rf $FILE_NAME
   tar zxf ${FILE_NAME}.tar.gz
-  sudo rm -rf $TOMCAT_PATH
-  sudo mv $FILE_NAME $TOMCAT_PATH
+  rm -rf $TOMCAT_PATH
+  mv $FILE_NAME $TOMCAT_PATH
 
   cd -
 }
 
 setup() {
-  sudo cp ${FILE_PATH}/etc/init.d/tomcat /etc/init.d
+  cp ${FILE_PATH}/etc/init.d/tomcat /etc/init.d
+  chmod +x /etc/init.d/tomcat
 }
 
 start() {
-  sudo service tomcat start
+  service tomcat start
 }
 
 ###################
