@@ -79,6 +79,7 @@ prepare() {
 
   chown -R ${USERNAME}:${GROUP} $CONFIG_FOLDER
   chown -R ${USERNAME}:${GROUP} $LOG_FOLDER
+  chown -R ${USERNAME}:${GROUP} $PID_FOLDER
   chown -R ${USERNAME}:${GROUP} $SITE_NAME_HOME
 }
 
