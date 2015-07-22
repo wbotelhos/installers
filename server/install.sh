@@ -44,7 +44,7 @@ install() {
   sudo /tmp/installers/nginx/nginx.sh configure
 
   sudo /tmp/installers/ruby/ruby.sh activate 2.2.2
-  sudo /tmp/installers/git/git.sh activate 2.4.1
+  sudo /tmp/installers/git/git.sh activate 2.4.6
   sudo /tmp/installers/nodejs/install.sh
   sudo /tmp/installers/unicorn/install.sh deploy www-data danca
   sudo /tmp/installers/java/install.sh
