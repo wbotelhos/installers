@@ -76,11 +76,11 @@ copy_database_conf() {
 }
 
 create_db() {
-  sudo -u postgres createdb -T template1 $DATABASE
+  sudo -u postgres createdb $DATABASE
 }
 
 create_user() {
-  sudo -u postgres psql template1 -c "CREATE ROLE $1 WITH createdb login password '${PASSWORD}';"
+  sudo -u postgres psql -c "CREATE ROLE $1 WITH createdb login password '${PASSWORD}';"
 }
 
 end() {
@@ -118,10 +118,10 @@ apt_get
 stop && \
 set_pg_hba trust && \
 start && \
-ask_password '"postgres" user password: ' && \
+ask_password '"postgres" new password: ' && \
 change_password postgres && \
-ask_password "\"${USERNAME}\" password: " && \
-create_user ${USERNAME} && \
+ask_password "\"${USERNAME}\" new password: " && \
+create_user $USERNAME && \
 create_db && \
 set_pg_hba md5 && \
 prepare && \
