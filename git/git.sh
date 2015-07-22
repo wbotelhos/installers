@@ -64,9 +64,9 @@ create_current_link() {
   if [ -L $CURRENT ]; then
     echo -e "[check current] link ${PREFIX} already exists"
   else
-    echo -e "[check current] link ${CURRENT} does not exists"
+    echo -e "[create_current_link] linking ${CURRENT} -> ${PREFIX}"
 
-    create_current_link
+    ln -s $PREFIX $CURRENT
   fi
 }
 
@@ -108,12 +108,6 @@ create_links() {
       ln -s $to $from
     done
   done
-}
-
-create_current_link() {
-  echo -e "[create_current_link] linking ${CURRENT} -> ${PREFIX}"
-
-  ln -s $PREFIX $CURRENT
 }
 
 deactivate() {
@@ -167,23 +161,15 @@ extract_tar_gz() {
 
 install() {
   if [ -d $PREFIX ]; then
-    echo -e "[check install] installation (${PREFIX}) already installed"
+    echo -e "[check install] version (${PREFIX}) already installed"
   else
-    echo -e "[check install] installation (${PREFIX}) does not exists"
-
-    install
+    download
+    extract_tar_gz
+    dependencies
+    prepare
+    configure
+    compile
   fi
-}
-
-installation() {
-  echo -e "[install] starting..."
-
-  download
-  extract_tar_gz
-  dependencies
-  prepare
-  configure
-  compile
 }
 
 prepare() {
@@ -237,7 +223,7 @@ begin
 
 case "${COMMAND}" in
   install)
-    installation
+    install
   ;;
 
   activate)
