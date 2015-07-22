@@ -1,5 +1,5 @@
 production:
-  adapter: adapter: postgresql
+  adapter: postgresql
   database: {{database}}
   encoding: utf8
   host: localhost
