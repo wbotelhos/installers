@@ -9,7 +9,7 @@ Check the section "vars"
 It will download and pre compile without activate it.
 
 ```bash
-./nginx.sh {{version}} install
+./nginx.sh install {{version}}
 ```
 
 # Activate
@@ -18,7 +18,7 @@ It will activate the given version.
 If not already installed, will be.
 
 ```bash
-./nginx.sh {{version}} activate
+./nginx.sh activate {{version}}
 ```
 
 # Deactivate

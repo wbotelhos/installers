@@ -5,7 +5,7 @@
 It will download and pre compile without activate it.
 
 ```bash
-./ruby.sh 2.1.3 install
+./ruby.sh install {{version}}
 ```
 
 # Activate
@@ -14,7 +14,7 @@ It will activate the given version.
 If not already installed, will be.
 
 ```bash
-./ruby.sh 2.1.3 activate
+./ruby.sh activate {{version}}
 ```
 
 # Deactivate

@@ -21,27 +21,27 @@ JOB_NAME='SSH Key#authorize'
 #####################
 
 ask() {
-  read -p "Access public key path (~/.ssh/danca.pem): " KEY_PATH
+  read -p "Access public key path (~/.ssh/blogy.pem): " KEY_PATH
 
-  [ "${KEY_PATH}" == '' ] && KEY_PATH=~/.ssh/danca.pem
+  [ "${KEY_PATH}" == '' ] && KEY_PATH=~/.ssh/blogy.pem
 
   echo -e "${YELLOW}KEY_PATH: ${NO_COLOR}${KEY_PATH}\n"
 
-  read -p "To be uploaded key path (~/.ssh/danca.pub): " KEY_PATH_TO_UPLOAD
+  read -p "To be uploaded key path (~/.ssh/blogy.pub): " KEY_PATH_TO_UPLOAD
 
-  [ "${KEY_PATH_TO_UPLOAD}" == '' ] && KEY_PATH_TO_UPLOAD=~/.ssh/danca.pub
+  [ "${KEY_PATH_TO_UPLOAD}" == '' ] && KEY_PATH_TO_UPLOAD=~/.ssh/blogy.pub
 
   echo -e "${YELLOW}KEY_PATH_TO_UPLOAD: ${NO_COLOR}${KEY_PATH_TO_UPLOAD}\n"
 
-  read -p "User credential (ubuntu): " USER_CREDENTIAL
+  read -p "User credential (user): " USER_CREDENTIAL
 
-  [ "${USER_CREDENTIAL}" == '' ] && USER_CREDENTIAL='ubuntu'
+  [ "${USER_CREDENTIAL}" == '' ] && USER_CREDENTIAL='user'
 
   echo -e "${YELLOW}USER_CREDENTIAL: ${NO_COLOR}${USER_CREDENTIAL}\n"
 
-  read -p "Domain credential (danca.me): " DOMAIN_CREDENTIAL
+  read -p "Domain credential (wbotelhos.com): " DOMAIN_CREDENTIAL
 
-  [ "${DOMAIN_CREDENTIAL}" == '' ] && DOMAIN_CREDENTIAL='danca.me'
+  [ "${DOMAIN_CREDENTIAL}" == '' ] && DOMAIN_CREDENTIAL='wbotelhos.com'
 
   echo -e "${YELLOW}DOMAIN_CREDENTIAL: ${NO_COLOR}${DOMAIN_CREDENTIAL}\n"
 

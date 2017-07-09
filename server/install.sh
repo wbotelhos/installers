@@ -35,21 +35,21 @@ end() {
 }
 
 install() {
-  # sudo /tmp/installers/server/bash.sh
+  sudo /tmp/installers/server/bash.sh
   sudo /tmp/installers/server/path.sh
   sudo /tmp/installers/unix/update.sh
   sudo /tmp/installers/user/create.sh deploy www-data
 
-  sudo /tmp/installers/nginx/nginx.sh activate 1.8.0
+  sudo /tmp/installers/nginx/nginx.sh activate 1.13.2
   sudo /tmp/installers/nginx/nginx.sh configure
 
-  sudo /tmp/installers/ruby/ruby.sh activate 2.2.2
-  sudo /tmp/installers/git/git.sh activate 2.4.6
+  sudo /tmp/installers/ruby/ruby.sh activate 2.4.1
+  sudo /tmp/installers/git/git.sh activate 2.13.2
   sudo /tmp/installers/nodejs/install.sh
-  sudo /tmp/installers/unicorn/install.sh deploy www-data danca
+  sudo /tmp/installers/unicorn/install.sh deploy www-data blogy
   sudo /tmp/installers/java/install.sh
 
-  sudo /tmp/installers/postgres/install.sh deploy danca_production danca
+  sudo /tmp/installers/postgres/install.sh deploy blogy_production blogy
 
   /tmp/installers/rubygems/rubygems.sh install
   /tmp/installers/bundler/install.sh

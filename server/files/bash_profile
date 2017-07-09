@@ -1,45 +1,27 @@
 SITE_NAME='{{site_name}}'
 
-# Alias
+# alias
+
 alias ...='cd ../../'
 alias ..='cd ..'
 alias .='cd .'
 alias la='ls -lah'
 alias psx='ps aux | grep'
 alias reload='source ~/.bash_profile'
-alias work='cd ~/workspace'
 
-## Logs
+## logs
+
 alias log_nginx="tail -fn 100 /var/log/nginx/*.log"
 alias log_app="tail -fn 100 /var/www/${SITE_NAME}/current/log/*.log"
 alias log_unicorn="tail -fn 100 /var/log/unicorn/*.log"
 alias logs="tail -fn 100 /var/log/nginx/*.log /var/www/${SITE_NAME}/current/log/*.log /var/log/unicorn/*.log"
 
-## Other
-alias server_up="cd /var/www/${SITE_NAME}/current && GEM_HOME=/usr/local/ruby/gems && RAILS_ENV=* bundle exec unicorn_rails -c /var/www/${SITE_NAME}/config/unicorn.rb -D"
+## other
+
+alias server_up="cd /var/www/${SITE_NAME}/current && GEM_HOME=/usr/local/ruby/gems && RAILS_ENV=production bundle exec unicorn_rails -c /var/www/${SITE_NAME}/config/unicorn.rb -D"
 alias work="cd /var/www/${SITE_NAME}"
 
-# Colors
-export CLICOLOR=1
-export GREP_COLOR='1;37'
-export GREP_OPTIONS='--color=auto'
-export LSCOLORS=ExFxCxDxBxegedabagacad
-
-prompt() {
-  local CYAN='\[\033[0;36m\]'
-  local PURPLE='\[\033[0;35m\]'
-  local RED='\[\033[0;31m\]'
-  local WHITE='\[\033[0;37m\]'
-  local YELLOW='\[\033[0;33m\]'
-
-  export PS1="${WHITE}\u${RED}@${PURPLE}\h ${CYAN}\w ${YELLOW}$ \[\e[m\]\[\e[m\]"
-}; prompt
-
-parse_git_branch() {
-  git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
-}
-
-# Functions
+# functions
 
 block_ip() {
   IP=$1

@@ -28,7 +28,7 @@ PID_FOLDER=/var/run/unicorn
 
 GROUP=${2:-'www-data'}
 JOB_NAME='Unicorn#install'
-SITE_NAME=${3:-'danca'}
+SITE_NAME=${3:-'blogy'}
 USERNAME=${1:-'deploy'}
 
 # folders

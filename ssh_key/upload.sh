@@ -21,9 +21,9 @@ JOB_NAME='SSH Key#upload'
 #####################
 
 ask() {
-  read -p 'Local key path (~/.ssh/id_rsa): ' KEY_PATH
+  read -p 'Local key path (~/.ssh/blogy): ' KEY_PATH
 
-  [ "${KEY_PATH}" == '' ] && KEY_PATH=~/.ssh/id_rsa
+  [ "${KEY_PATH}" == '' ] && KEY_PATH=~/.ssh/blogy
 
   read -p 'Upload private key? (Y/n): ' PRIVATE
 
@@ -41,11 +41,9 @@ ask() {
 
   [ "${USER_CREDENTIAL}" == '' ] && USER_CREDENTIAL='user'
 
-  read -p 'Domain credential (google.com) *: ' DOMAIN_CREDENTIAL
+  read -p 'Domain credential (wbotelhos.com): ' DOMAIN_CREDENTIAL
 
-  if [ "${DOMAIN_CREDENTIAL}" == '' ]; then
-    echo -e "\n${RED}Missing domain credential!${NO_COLOR}\n" && exit 1
-  fi
+  [ "${DOMAIN_CREDENTIAL}" == '' ] && DOMAIN_CREDENTIAL='wbotelhos.com'
 
   read -p "Remote user dir (/home/${USER_CREDENTIAL}): " REMOTE_DIR
 
@@ -55,9 +53,7 @@ ask() {
 
   read -p "Remote key name (${REMOTE_KEY_NAME_DEFAULT}): " REMOTE_KEY_NAME
 
-  if [ "${REMOTE_KEY_NAME}" == '' ]; then
-    REMOTE_KEY_NAME=${REMOTE_KEY_NAME_DEFAULT}
-  fi
+  [ "${REMOTE_KEY_NAME}" == '' ] && REMOTE_KEY_NAME=${REMOTE_KEY_NAME_DEFAULT}
 }
 
 begin() {
@@ -74,9 +70,9 @@ upload() {
   REMOTE=${USER_CREDENTIAL}@${DOMAIN_CREDENTIAL}:${REMOTE_DIR}/.ssh/${REMOTE_KEY_NAME}
 
   if [ $PUBLIC == 'true' ]; then
-    echo -e "\n${YELLOW}scp ${KEY_PATH}.pub ${REMOTE}${NO_COLOR}"
+    echo -e "\n${YELLOW}scp ${KEY_PATH}.pub to ${REMOTE}.pub${NO_COLOR}"
 
-    scp ${KEY_PATH}.pub $REMOTE
+    scp ${KEY_PATH}.pub ${REMOTE}.pub
   fi
 
   if [ $PRIVATE == 'true' ]; then

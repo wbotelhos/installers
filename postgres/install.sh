@@ -18,8 +18,8 @@ fi
 # --- vars --- #
 ################
 
-SITE_NAME=${3:-'danca'}
-DATABASE=${2:-'danca_production'}
+SITE_NAME=${3:-'blogy'}
+DATABASE=${2:-'blogy_production'}
 USERNAME=${1:-'deploy'}
 
 ##################

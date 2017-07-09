@@ -24,8 +24,8 @@ fi
 ################
 
 GROUP='www-data'
-SERVER_NAME='danca.me'
-SITE_NAME='danca'
+SERVER_NAME='wbotelhos.com'
+SITE_NAME='blogy'
 USERNAME='deploy'
 
 ###################

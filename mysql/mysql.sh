@@ -19,7 +19,7 @@ fi
 ################
 
 PASSWORD=$2
-SITE_NAME='danca'
+SITE_NAME='blogy'
 USERNAME='deploy'
 
 ##################
