@@ -18,9 +18,9 @@ fi
 # --- vars --- #
 ################
 
-GROUP='user'
+GROUP='ubuntu'
 SITE_NAME='blogy'
-USERNAME='user'
+USERNAME='ubuntu'
 
 ###################
 # --- configs --- #
