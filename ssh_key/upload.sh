@@ -37,9 +37,9 @@ ask() {
     PUBLIC='true'
   fi
 
-  read -p 'User credential (user): ' USER_CREDENTIAL
+  read -p 'User credential (ubuntu): ' USER_CREDENTIAL
 
-  [ "${USER_CREDENTIAL}" == '' ] && USER_CREDENTIAL='user'
+  [ "${USER_CREDENTIAL}" == '' ] && USER_CREDENTIAL='ubuntu'
 
   read -p 'Domain credential (wbotelhos.com): ' DOMAIN_CREDENTIAL
 
