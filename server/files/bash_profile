@@ -36,14 +36,14 @@ block_ip_show() {
 log_clean() {
   sudo echo '' > /var/log/nginx/access.log
   sudo echo '' > /var/log/nginx/error.log
-  sudo echo '' > /var/www/${SITE_NAME}/shared/log/production.log
-  sudo echo '' > /var/www/${SITE_NAME}/shared/log/unicorn.error.log
-  sudo echo '' > /var/www/${SITE_NAME}/shared/log/unicorn.out.log
+  sudo echo '' > /var/www/${SITE_NAME}/current/log/production.log
+  sudo echo '' > /var/log/unicorn/error.log
+  sudo echo '' > /var/log/unicorn/out.log
 }
 
 server_down() {
-  if [ -f /var/www/${SITE_NAME}/shared/pids/unicorn.pid ]; then
-    kill $(cat /var/www/${SITE_NAME}/shared/pids/unicorn.pid)
+  if [ -f /var/run/unicorn/unicorn.pid ]; then
+    kill $(cat /var/run/unicorn/unicorn.pid)
   fi
 }
 
