@@ -24,6 +24,7 @@ fi
 ################
 
 GROUP='www-data'
+PAGESPEED_VERSION='1.12.34.2-stable'
 SERVER_NAME='wbotelhos.com'
 SITE_NAME='blogy'
 USERNAME='deploy'
@@ -47,6 +48,7 @@ FILE_NAME="${FOLDER_NAME}.${EXTENSION}"
 DOWNLOAD_URL="http://nginx.org/download/${FILE_NAME}"
 
 # static folders
+
 ETC_FOLDER=/etc/nginx
 INIT_FOLDER=/etc/init
 LIB_FOLDER=/var/lib/nginx
@@ -55,10 +57,13 @@ PID_FOLDER=/var/run/nginx/
 WWW_FOLDER=/var/www
 
 # static files
+
 LOCK_FILE=/var/lock/nginx.lock
 
 # folders
+
 BODY_FOLDER=${LIB_FOLDER}/body
+CONFD_FOLDER=${ETC_FOLDER}/conf.d
 FASTCGI_FOLDER=${LIB_FOLDER}/fastcgi
 PROXY_FOLDER=${LIB_FOLDER}/proxy
 SITES_AVAILABLE_FOLDER=${ETC_FOLDER}/sites-available
@@ -69,6 +74,7 @@ AVAILABLE_SITE_FILE=${SITES_AVAILABLE_FOLDER}/${SITE_NAME}.conf
 ENABLED_SITE_FILE=${SITES_ENABLED_FOLDER}/${SITE_NAME}.conf
 
 # files
+
 ACCESS_LOG_FILE=${LOG_FOLDER}/access.log
 CONF_FILE=${ETC_FOLDER}/nginx.conf
 ERROR_LOG_FILE=${LOG_FOLDER}/error.log
@@ -76,10 +82,18 @@ INIT_FILE=${INIT_FOLDER}/nginx.conf
 SITE_ENABLED_FILE=${ETC_FOLDER}/sites-enabled/${SITE_NAME}.conf
 
 # local
+
 LOCAL_FOLDER=/tmp/installers/nginx
 LOCAL_CONF_FILE=${LOCAL_FOLDER}/etc/nginx/nginx.conf
 LOCAL_INIT_FILE=${LOCAL_FOLDER}/etc/init/nginx.conf
 LOCAL_SITE_FILE=${LOCAL_FOLDER}/etc/nginx/sites-available/site.conf
+
+# pagespeed
+
+LOCAL_PAGESPEED_FILE=${LOCAL_FOLDER}/etc/nginx/conf.d/pagespeed.conf
+
+PAGESPEED_FILE=${CONFD_FOLDER}/pagespeed
+PAGESPEED_FLAGS="--with-cc=/usr/lib/gcc-mozilla/bin/gcc --with-ld-opt=-static-libstdc++"
 
 #####################
 # --- Functions --- #
@@ -110,16 +124,15 @@ configure() {
   cd $FOLDER_NAME
 
   ./configure --prefix=${PREFIX} \
+    --add-module=${SRC}/ngx_pagespeed-${PAGESPEED_VERSION} ${PAGESPEED_FLAGS} \
     --conf-path=${CONF_FILE} \
     --http-client-body-temp-path=${BODY_FOLDER} \
     --http-fastcgi-temp-path=${FASTCGI_FOLDER} \
     --http-proxy-temp-path=${PROXY_FOLDER} \
     --lock-path=${LOCK_FILE} \
-    --with-debug \
     --with-http_gzip_static_module \
     --with-http_realip_module \
-    --with-http_ssl_module \
-    --with-ipv6
+    --with-http_ssl_module
 }
 
 copy_app_conf() {
@@ -132,6 +145,10 @@ copy_app_conf() {
 copy_init_conf() {
   cat $LOCAL_INIT_FILE | \
   sed s,{{install_dir}},${INSTALL_DIR},g > $INIT_FILE
+}
+
+copy_pagespeed_conf() {
+  cat $LOCAL_PAGESPEED_FILE > $PAGESPEED_FILE
 }
 
 copy_site_conf() {
@@ -175,6 +192,15 @@ dependencies() {
   # Implementing the deflate compression method found in gzip and PKZIP.
   # http://packages.debian.org/wheezy/zlib1g-dev
   apt-get install zlib1g-dev -qq -y
+
+  # pagespeed
+
+  apt-get install build-essential -qq -y
+  apt-get install gcc-mozilla     -qq -y
+  apt-get install libpcre3        -qq -y
+  apt-get install libpcre3-dev    -qq -y
+  apt-get install unzip           -qq -y
+  apt-get install zlib1g-dev      -qq -y
 }
 
 download() {
@@ -209,8 +235,41 @@ installed() {
   echo -e "\n${YELLOW}Run '${0} activate ${VERSION}' to activate this version.${NO_COLOR}\n"
 }
 
+pagespeed() {
+  cd $SRC
+
+  PAGESPEED_FILE_NAME="v${PAGESPEED_VERSION}.zip"
+  PAGESPEED_DOWNLOAD_URL="https://github.com/pagespeed/ngx_pagespeed/archive/${PAGESPEED_FILE_NAME}"
+  PAGESPEED_RELEASE_NUMBER=${PAGESPEED_VERSION/stable}
+
+  if [ ! -e $PAGESPEED_FILE_NAME ]; then
+    echo -e "Downloading from ${PAGESPEED_DOWNLOAD_URL}"
+    wget -qO $PAGESPEED_FILE_NAME $PAGESPEED_DOWNLOAD_URL 2> /dev/null
+
+    if [ $? != 0 ]; then
+      echo -e "${RED}Invalid version (${PAGESPEED_VERSION}), check avaliable one at: ${SITE}\n${NO_COLOR}"
+      exit 1
+    fi
+  fi
+
+  unzip -qo $PAGESPEED_FILE_NAME
+
+  cd ngx_pagespeed-${PAGESPEED_VERSION}
+
+  PSOL_URL=https://dl.google.com/dl/page-speed/psol/${PAGESPEED_RELEASE_NUMBER}.tar.gz
+
+  [ -e scripts/format_binary_url.sh ] && PSOL_URL=$(scripts/format_binary_url.sh PSOL_BINARY_URL)
+
+  if [ ! -e $(basename ${PSOL_URL}) ]; then
+    wget $PSOL_URL
+  fi
+
+  tar -xzf $(basename ${PSOL_URL})
+}
+
 prepare() {
   mkdir -p $BODY_FOLDER
+  mkdir -p $CONFD_FOLDER
   mkdir -p $ETC_FOLDER
   mkdir -p $FASTCGI_FOLDER
   mkdir -p $INIT_FOLDER
@@ -222,6 +281,14 @@ prepare() {
   mkdir -p $SITES_AVAILABLE_FOLDER
   mkdir -p $SITES_ENABLED_FOLDER
   mkdir -p $SSL_FOLDER
+
+  # pagespeed
+
+  mkdir -p /var/ngx_pagespeed_cache
+  mkdir -p /var/log/pagespeed
+
+  chown ${USERNAME}:${GROUP} /var/ngx_pagespeed_cache
+  chown ${USERNAME}:${GROUP} /var/log/pagespeed
 }
 
 remove_links() {
@@ -240,17 +307,17 @@ remove_links() {
 
 result() {
   echo
+  echo -e "${YELLOW}-${NO_COLOR} ${PAGESPEED_FLAGS}"
   echo -e "${YELLOW}-${NO_COLOR} conf-path=${CONF_FILE}"
   echo -e "${YELLOW}-${NO_COLOR} http-client-body-temp-path=${BODY_FOLDER}"
   echo -e "${YELLOW}-${NO_COLOR} http-fastcgi-temp-path=${FASTCGI_FOLDER}"
   echo -e "${YELLOW}-${NO_COLOR} http-proxy-temp-path=${PROXY_FOLDER}"
   echo -e "${YELLOW}-${NO_COLOR} lock-path=${LOCK_FILE}"
+  echo -e "${YELLOW}-${NO_COLOR} ngx_pagespeed-${PAGESPEED_VERSION}"
   echo -e "${YELLOW}-${NO_COLOR} prefix=${PREFIX}"
-  echo -e "${YELLOW}-${NO_COLOR} with-debug"
   echo -e "${YELLOW}-${NO_COLOR} with-http_gzip_static_module"
   echo -e "${YELLOW}-${NO_COLOR} with-http_realip_module"
   echo -e "${YELLOW}-${NO_COLOR} with-http_ssl_module"
-  echo -e "${YELLOW}-${NO_COLOR} with-ipv6"
   echo
 }
 
@@ -266,6 +333,7 @@ begin
 
 case "${COMMAND}" in
   install)
+    pagespeed
     download
     extract
     dependencies
@@ -292,6 +360,7 @@ case "${COMMAND}" in
   configure)
     prepare
     copy_app_conf
+    copy_pagespeed_conf
     copy_site_conf
     create_site_link
     copy_init_conf
