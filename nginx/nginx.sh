@@ -92,7 +92,7 @@ LOCAL_SITE_FILE=${LOCAL_FOLDER}/etc/nginx/sites-available/site.conf
 
 LOCAL_PAGESPEED_FILE=${LOCAL_FOLDER}/etc/nginx/conf.d/pagespeed.conf
 
-PAGESPEED_FILE=${CONFD_FOLDER}/pagespeed
+PAGESPEED_FILE=${CONFD_FOLDER}/pagespeed.conf
 PAGESPEED_FLAGS="--with-cc=/usr/lib/gcc-mozilla/bin/gcc --with-ld-opt=-static-libstdc++"
 
 #####################
