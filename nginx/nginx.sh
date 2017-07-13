@@ -53,7 +53,7 @@ ETC_FOLDER=/etc/nginx
 INIT_FOLDER=/etc/init
 LIB_FOLDER=/var/lib/nginx
 LOG_FOLDER=/var/log/nginx
-PID_FOLDER=/var/run/nginx/
+PID_FOLDER=/var/run/nginx
 WWW_FOLDER=/var/www
 
 # static files
