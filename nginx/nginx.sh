@@ -199,7 +199,6 @@ dependencies() {
   apt-get install gcc-mozilla     -qq -y
   apt-get install libpcre3        -qq -y
   apt-get install libpcre3-dev    -qq -y
-  apt-get install unzip           -qq -y
   apt-get install zlib1g-dev      -qq -y
 }
 
@@ -238,7 +237,7 @@ installed() {
 pagespeed() {
   cd $SRC
 
-  PAGESPEED_FILE_NAME="v${PAGESPEED_VERSION}.zip"
+  PAGESPEED_FILE_NAME="v${PAGESPEED_VERSION}.tar.gz"
   PAGESPEED_DOWNLOAD_URL="https://github.com/pagespeed/ngx_pagespeed/archive/${PAGESPEED_FILE_NAME}"
   PAGESPEED_RELEASE_NUMBER=${PAGESPEED_VERSION/stable}
 
@@ -252,7 +251,7 @@ pagespeed() {
     fi
   fi
 
-  unzip -qo $PAGESPEED_FILE_NAME
+  tar -xzf $PAGESPEED_FILE_NAME
 
   cd ngx_pagespeed-${PAGESPEED_VERSION}
 
